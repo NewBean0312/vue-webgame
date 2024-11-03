@@ -2,7 +2,7 @@
   <div>
     <div id="screen" :class="state" @click="onClickScreen">{{ message }}</div>
     <div>
-      <div>평균 시간: {{result.reduce((a, c) => a + c, 0) / result.length || 0}}ms</div>
+      <div>평균 시간: {{ result.reduce((a, c) => a + c, 0) / result.length || 0 }}ms</div>
       <button @click="onReset">리셋</button>
     </div>
   </div>
@@ -32,15 +32,15 @@ export default {
           this.state = "now";
           this.message = "지금 클릭!";
           startTime = new Date();
-        }, Math.floor(Math.random() * 1000) + 2000);
+        }, Math.floor(Math.random() * 1000) + 2000); // 2~3초
       } else if (this.state === "ready") {
-        clearTimeout(timeout);
-        this.state = "waiting";
-        this.message = "너무 성급하시군요! 초록새이 된 후에 클릭하세요.";
+        clearTimeout(timeout)
+        this.state = "now";
+        this.message = "너무 성급하시군요! 초록색이 된 후에 클릭하세요.";
       } else if (this.state === "now") {
         endTime = new Date();
         this.state = "waiting";
-        this.message = "클릭해서 시작하세요.";
+        this.message = "클릭해서 시작하세요";
         this.result.push(endTime - startTime);
       }
     },
