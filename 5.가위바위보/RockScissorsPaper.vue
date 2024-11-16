@@ -1,10 +1,7 @@
 <template>
   <div>
     <div>
-      <div
-        id="computer"
-        :style="computedStyleObject"
-      ></div>
+      <div id="computer" :style="computedStyleObject"></div>
       <dutton @click="onClickButton('바위')">바위</dutton>
       <dutton @click="onClickButton('가위')">가위</dutton>
       <dutton @click="onClickButton('보')">보</dutton>
@@ -23,6 +20,8 @@ const rspCords = {
   보: "-284px",
 };
 
+let interval = null;
+
 export default {
   data() {
     return {
@@ -35,11 +34,25 @@ export default {
     computedStyleObject() {
       return {
         background: `url(https://en.pimg.jp/023/182/267/1/23182267.jpg) ${this.imageCode} 0`,
-      }
-    }
+      };
+    },
   },
   methods: {
     onClickButton(choice) {},
+  },
+  mounted() {
+    interval = setInterval(() => {
+      if (this.imageCode === rspCords.바위) {
+        this.imageCode = rspCords.가위;
+      } else if (this.imageCode === rspCords.가위) {
+        this.imageCode = rspCords.보;
+      } else if (this.imageCode === rspCords.보) {
+        this.imageCode = rspCords.바위;
+      }
+    }, 100);
+  },
+  beforeDestroy() {
+    clearInterval(interval);
   },
 };
 </script>
