@@ -1,5 +1,5 @@
 <template>
-  <td>{{ cellData }}</td>
+  <td @click="onClickTd">{{ cellData }}</td>
 </template>
 
 <script>
@@ -8,6 +8,11 @@ export default {
     cellData: String,
     rowIndex: Number,
     cellIndex: Number,
+  },
+  methods: {
+    onClickTd() {
+      this.$root.$data.turn = this.$root.$data.turn === "O" ? "X" : "O";
+    },
   },
 };
 </script>

@@ -17,10 +17,13 @@ export default {
   components: {
     TdComponent,
   },
+  data() {
+    parent: "부모 컴포넌트";
+  },
   props: {
     rowData: Array,
     rowIndex: Number,
-  }
+  },
 };
 </script>
 
