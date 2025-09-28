@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import { CLICK_CELL, SET_WINNER, RESET_GAME, CHANGE_TURN, NO_WINNER } from './store';
+
 export default {
   props: {
     cellData: String,
@@ -11,60 +13,48 @@ export default {
   },
   methods: {
     onClickTd() {
-      if (this.cellData) {
-        return;
-      }
+      if (this.cellData) return;
 
-      const rootData = this.$root.$data;
-      this.$set(
-        rootData.tableData[this.rowIndex],
-        this.cellIndex,
-        rootData.turn
-      );
+      this.$store.commit(CLICK_CELL, { row: this.rowIndex, cell: this.cellIndex });
 
       let win = false;
       if (
-        rootData.tableData[this.rowIndex][0] === rootData.turn &&
-        rootData.tableData[this.rowIndex][1] === rootData.turn &&
-        rootData.tableData[this.rowIndex][2] === rootData.turn
+        this.tableData[this.rowIndex][0] === this.turn &&
+        this.tableData[this.rowIndex][1] === this.turn &&
+        this.tableData[this.rowIndex][2] === this.turn
       ) {
         win = true;
       }
       if (
-        rootData.tableData[0][this.cellIndex] === rootData.turn &&
-        rootData.tableData[1][this.cellIndex] === rootData.turn &&
-        rootData.tableData[2][this.cellIndex] === rootData.turn
+        this.tableData[0][this.cellIndex] === this.turn &&
+        this.tableData[1][this.cellIndex] === this.turn &&
+        this.tableData[2][this.cellIndex] === this.turn
       ) {
         win = true;
       }
       if (
-        rootData.tableData[0][0] === rootData.turn &&
-        rootData.tableData[1][1] === rootData.turn &&
-        rootData.tableData[2][2] === rootData.turn
+        this.tableData[0][0] === this.turn &&
+        this.tableData[1][1] === this.turn &&
+        this.tableData[2][2] === this.turn
       ) {
         win = true;
       }
       if (
-        rootData.tableData[0][2] === rootData.turn &&
-        rootData.tableData[1][1] === rootData.turn &&
-        rootData.tableData[2][0] === rootData.turn
+        this.tableData[0][2] === this.turn &&
+        this.tableData[1][1] === this.turn &&
+        this.tableData[2][0] === this.turn
       ) {
         win = true;
       }
 
       if (win) {
         // 이긴 경우: 3줄 달성
-        rootData.winner = rootData.turn;
-        rootData.turn = "O";
-        rootData.tableData = [
-          ["", "", ""],
-          ["", "", ""],
-          ["", "", ""],
-        ];
+        this.$store.commit(SET_WINNER, this.turn);
+        this.$store.commit(RESET_GAME);
       } else {
         // 무승부
         let all = true; // all의 true면 무승부라는 뜻
-        rootData.tableData.forEach((row) => {
+        this.tableData.forEach((row) => {
           // 무승부 검사
           row.forEach((cell) => {
             if (!cell) {
@@ -74,15 +64,11 @@ export default {
         });
         if (all) {
           // 무승부
-          rootData.winner = "";
-          rootData.turn = "O";
-          rootData.tableData = [
-            ["", "", ""],
-            ["", "", ""],
-            ["", "", ""],
-          ];
+          this.$store.commit(NO_WINNER);
+          this.$store.commit(RESET_GAME);
+        } else {
+          this.$store.commit(CHANGE_TURN);
         }
-        rootData.turn = rootData.turn === "O" ? "X" : "O";
       }
     },
   },
