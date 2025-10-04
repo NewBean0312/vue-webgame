@@ -7,9 +7,19 @@ import { CLICK_CELL, SET_WINNER, RESET_GAME, CHANGE_TURN, NO_WINNER } from './st
 
 export default {
   props: {
-    cellData: String,
     rowIndex: Number,
     cellIndex: Number,
+  },
+  computed: {
+    cellData() {
+      return this.$store.state.tableData[this.rowIndex][this.cellIndex];
+    },
+    tableData() {
+      return this.$store.state.tableData;
+    },
+    turn() {
+      return this.$store.state.turn;
+    }
   },
   methods: {
     onClickTd() {
