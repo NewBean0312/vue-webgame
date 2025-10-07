@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import store from "./store";
 import TableComponent from "./TableComponent";
 
@@ -14,6 +15,26 @@ export default {
   store,
   components: {
     TableComponent,
+  },
+  data() {
+    return {
+      data: 1,
+    }
+  },
+  computed: {
+    ...mapState(['winner', 'turn']),
+    // ...mapState({
+    //   winner(state) {
+    //     return state.winner + this.data;
+    //   },
+    //   turnState: 'turn',
+    // })
+    // winner() {
+    //   return this.$store.state.winner;
+    // },
+    // turn() {
+    //   return this.$store.state.turn;
+    // }
   },
   data() {
     return {

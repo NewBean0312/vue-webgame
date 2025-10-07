@@ -1,7 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-Vue.use(Vuex);
+Vue.use(Vuex); // this.$store
+// Vue.use(axios); // this.$axios
 
 export const SET_WINNER = "SET_WINNER";
 export const CLICK_CELL = "CLICK_CELL";
@@ -19,6 +20,11 @@ export default new Vuex.Store({
     turn: "O",
     winner: "",
   }, // vue의 data와 비슷
+  getters: {
+    turnMessage(state) {
+      return state.turn + "님이 승리하셨습니다.";
+    },
+  }, // vue의 computed와 비슷
   mutations: {
     [SET_WINNER](state, winner) {
       state.winner = winner;
