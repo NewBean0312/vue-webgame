@@ -19,7 +19,7 @@ export const CODE = {
   QUESTION_MINE: -4,
   FLAG_MINE: -5,
   CLICKED_MINE: -6,
-  OPEND: 0, // 0 이상이면 다 opened
+  OPENED: 0, // 0 이상이면 다 opened
 }
 
 const plantMine = (row, cell, mine) => {
