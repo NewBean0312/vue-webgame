@@ -20,7 +20,7 @@ export const CODE = {
   FLAG_MINE: -5,
   CLICKED_MINE: -6,
   OPENED: 0, // 0 이상이면 다 opened
-}
+};
 
 const plantMine = (row, cell, mine) => {
   console.log(row, cell, mine);
@@ -49,7 +49,7 @@ const plantMine = (row, cell, mine) => {
   }
 
   for (let k = 0; k < shuffle.length; k++) {
-    const ver = Math.floor(shuffle[k] / cell)
+    const ver = Math.floor(shuffle[k] / cell);
     const hor = shuffle[k] % cell;
     data[ver][hor] = CODE.MINE;
   }
@@ -82,11 +82,31 @@ export default new Vuex.Store({
       state.timer = 0;
       state.halted = false;
     },
-    [OPEN_CELL](state) {},
+    [OPEN_CELL](state, { row, cell }) {
+      Vue.set(state.tableData[row], cell, CODE.OPENED);
+    },
     [CLICK_MINE](state) {},
-    [FLAG_CELL](state) {},
-    [QUESTION_CELL](state) {},
-    [NORMALIZE_CELL](state) {},
+    [FLAG_CELL](state, { row, cell }) {
+      if (state.tableData[row][cell] === CODE.MINE) {
+        Vue.set(state.tableData[row], cell, CODE.FLAG_MINE);
+      } else {
+        Vue.set(state.tableData[row], cell, CODE.FLAG);
+      }
+    },
+    [QUESTION_CELL](state, { row, cell }) {
+      if (state.tableData[row][cell] === CODE.FLAG_MINE) {
+        Vue.set(state.tableData[row], cell, CODE.QUESTION_MINE);
+      } else {
+        Vue.set(state.tableData[row], cell, CODE.QUESTION);
+      }
+    },
+    [NORMALIZE_CELL](state, { row, cell }) {
+      if (state.tableData[row][cell] === CODE.QUESTION_MINE) {
+        Vue.set(state.tableData[row], cell, CODE.MINE);
+      } else {
+        Vue.set(state.tableData[row], cell, CODE.NORMAL);
+      }
+    },
     [INCREMENT_TIMER](state) {
       state.timer += 1;
     },
