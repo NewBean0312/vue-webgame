@@ -5,7 +5,7 @@
         v-for="(cellData, cellIndex) in rowData"
         :key="cellIndex"
         :style="cellDataStyle(rowIndex, cellIndex)"
-        @click="onClickId(rowIndex, cellIndex)"
+        @click="onClickTd(rowIndex, cellIndex)"
         @contextmenu.prevent="onRightClickTd(rowIndex, cellIndex)"
       >
         {{ cellDataText(rowIndex, cellIndex) }}
@@ -17,6 +17,7 @@
 <script>
 import { mapState } from "vuex";
 import {
+  CLICK_MINE,
   CODE,
   FLAG_CELL,
   NORMALIZE_CELL,
@@ -71,14 +72,24 @@ export default {
           case CODE.CLICKED_MINE:
             return "펑";
           default:
-            return "";
+            return this.$store.state.tableData[row][cell] || "";
         }
       };
     },
   },
   methods: {
-    onClickId(row, cell) {
+    onClickTd(row, cell) {
       if (this.halted) return;
+
+      switch (this.tableData[row][cell]) {
+        case CODE.NORMAL:
+          return this.$store.commit(OPEN_CELL, { row, cell });
+        case CODE.MINE:
+          return this.$store.commit(CLICK_MINE, { row, cell });
+        default:
+          return;
+      }
+
       this.$store.commit(OPEN_CELL, { row, cell });
     },
     onRightClickTd(row, cell) {
